@@ -3222,6 +3222,11 @@ public class WindowManagerService extends IWindowManager.Stub
         return mPointerEventDispatcher != null;
     }
 
+    @Override
+    public void addSystemUIVisibilityFlag(int flags) {
+        mLastStatusBarVisibility |= flags;
+    }
+
     // Called by window manager policy. Not exposed externally.
     @Override
     public int getLidState() {

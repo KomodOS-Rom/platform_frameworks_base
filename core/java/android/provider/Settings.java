@@ -14321,6 +14321,7 @@ public final class Settings {
          * Supported keys:
          * compatibility_wal_supported      (boolean)
          * wal_syncmode       (String)
+         * truncate_size      (int)
          *
          * @hide
          */

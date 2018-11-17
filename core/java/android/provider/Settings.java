@@ -4542,6 +4542,26 @@ public final class Settings {
         public static final String SHOW_VOLTE_ICON = "volte_icon";
 
         /**
+         * Control how to handle the display cutout
+         * @hide
+         */
+        public static final String DISPLAY_CUTOUT_MODE = "display_cutout_mode";
+
+        /** @hide */
+        private static final Validator DISPLAY_CUTOUT_MODE_VALIDATOR = new
+                SettingsValidators.InclusiveIntegerRangeValidator(0, 2);
+
+        /**
+         * Control how to handle the display cutout
+         * @hide
+         */
+        public static final String STOCK_STATUSBAR_IN_HIDE = "stock_statusbar_in_hide";
+
+        /** @hide */
+        private static final Validator STOCK_STATUSBAR_IN_HIDE_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
+        /**
          * Whether to mute annoying notifications
          * @hide
          */
@@ -5376,7 +5396,9 @@ public final class Settings {
             STATUS_BAR_SHOW_TICKER,
             STATUS_BAR_TICKER_ANIMATION_MODE,
             STATUS_BAR_TICKER_TICK_DURATION,
-            USE_OLD_MOBILETYPE
+            USE_OLD_MOBILETYPE,
+            DISPLAY_CUTOUT_MODE,
+            STOCK_STATUSBAR_IN_HIDE,
         };
 
         /**
@@ -5532,6 +5554,8 @@ public final class Settings {
             PRIVATE_SETTINGS.add(LIVE_DISPLAY_HINTED);
             PRIVATE_SETTINGS.add(DISPLAY_CUTOUT_HIDDEN);
             PRIVATE_SETTINGS.add(FORCE_FULLSCREEN_CUTOUT_APPS);
+            PRIVATE_SETTINGS.add(DISPLAY_CUTOUT_MODE);
+            PRIVATE_SETTINGS.add(STOCK_STATUSBAR_IN_HIDE);
         }
 
 
@@ -5675,6 +5699,8 @@ public final class Settings {
             VALIDATORS.put(LIVE_DISPLAY_HINTED, LIVE_DISPLAY_HINTED_VALIDATOR);
             VALIDATORS.put(DISPLAY_CUTOUT_HIDDEN, DISPLAY_CUTOUT_HIDDEN_VALIDATOR);
             VALIDATORS.put(FORCE_FULLSCREEN_CUTOUT_APPS, FORCE_FULLSCREEN_CUTOUT_APPS_VALIDATOR);
+            VALIDATORS.put(DISPLAY_CUTOUT_MODE, DISPLAY_CUTOUT_MODE_VALIDATOR);
+            VALIDATORS.put(STOCK_STATUSBAR_IN_HIDE, STOCK_STATUSBAR_IN_HIDE_VALIDATOR);
         }
 
         /**

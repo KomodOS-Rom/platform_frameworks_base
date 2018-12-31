@@ -5038,6 +5038,12 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_INFO = "lockscreen_info";
+		
+        /**
+         * Select which lockscreen clock style to display
+         * @hide
+         */
+        public static final String LOCKSCREEN_CLOCK_SELECTION = "lockscreen_clock_selection";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings

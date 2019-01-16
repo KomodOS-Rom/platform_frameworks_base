@@ -146,8 +146,7 @@ public final class ViewRootImpl implements ViewParent,
     private static final boolean DEBUG_CONFIGURATION = false || LOCAL_LOGV;
     private static final boolean DEBUG_FPS = false;
     private static final boolean DEBUG_INPUT_STAGES = false || LOCAL_LOGV;
-    private static final boolean DEBUG_KEEP_SCREEN_ON = false || LOCAL_LOGV;
-
+    private static final boolean DEBUG_KEEP_SCREEN_ON = false || LOCAL_LOGV;	
     private static final float GESTURE_KEY_DISTANCE_THRESHOLD = 50.0f;
     private static final long GESTURE_MOTION_QUEUE_DELAY = 200;
     private static final int MSG_GESTURE_MOTION_DOWN = 5566;
@@ -565,7 +564,7 @@ public final class ViewRootImpl implements ViewParent,
 
         loadSystemProperties();
         mPerf = new BoostFramework(context);
-
+		
         DisplayMetrics dm = new DisplayMetrics();
         mAttachInfo.mDisplay.getRealMetrics(dm);
         mScreenHeight = Math.max(dm.widthPixels, dm.heightPixels);
@@ -5310,7 +5309,7 @@ public final class ViewRootImpl implements ViewParent,
             mAttachInfo.mUnbufferedDispatchRequested = false;
             mAttachInfo.mHandlingPointerEvent = true;
             boolean handled = mView.dispatchPointerEvent(event);
-            int action = event.getActionMasked();
+            action = event.getActionMasked();
             if (!SCROLL_BOOST_SS_ENABLE) {
                 if (action == MotionEvent.ACTION_MOVE) {
                     mHaveMoveEvent = true;
@@ -7628,7 +7627,6 @@ public final class ViewRootImpl implements ViewParent,
             mUpcomingWindowFocus = hasFocus;
             mUpcomingInTouchMode = inTouchMode;
         }
-
         Message msg = Message.obtain();
         msg.what = MSG_WINDOW_FOCUS_CHANGED;
         mHandler.sendMessage(msg);

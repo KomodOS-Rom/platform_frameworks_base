@@ -13465,6 +13465,21 @@ public final class Settings {
          * @hide
          */
         public static final String SHOW_CPU_OVERLAY = "show_cpu_overlay";
+		
+        /**
+         * @hide
+         */
+        public static final String KEY_MI_SOUND_ENHANCER = "mi_sound_enhancer";
+		
+        /**
+         * @hide
+         */
+        public static final String KEY_HEADSET_TYPE = "dirac_headsets";
+		
+        /**
+         * @hide
+         */
+        public static final String KEY_MUSIC_MODE = "dirac_mode";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings

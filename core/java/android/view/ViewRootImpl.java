@@ -5120,7 +5120,7 @@ public final class ViewRootImpl implements ViewParent,
             mAttachInfo.mUnbufferedDispatchRequested = false;
             mAttachInfo.mHandlingPointerEvent = true;
             boolean handled = mView.dispatchPointerEvent(event);
-            action = event.getActionMasked();
+            int action = event.getActionMasked();
             if (!SCROLL_BOOST_SS_ENABLE) {
                 if (action == MotionEvent.ACTION_MOVE) {
                     mHaveMoveEvent = true;

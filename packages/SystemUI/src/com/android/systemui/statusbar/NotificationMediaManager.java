@@ -83,6 +83,18 @@ public class NotificationMediaManager implements Dumpable {
         }
 
         @Override
+        public void onMetadataChanged(MediaMetadata metadata) {
+            super.onMetadataChanged(metadata);
+            if (DEBUG_MEDIA) {
+                Log.v(TAG, "DEBUG_MEDIA: onMetadataChanged: " + metadata);
+            }
+            mMediaMetadata = metadata;
+            mPresenter.updateMediaMetaData(true, true);
+            setMediaPlaying();
+        }
+
+
+        @Override
         public void onSessionDestroyed() {
             super.onSessionDestroyed();
             if (mListener != null) {

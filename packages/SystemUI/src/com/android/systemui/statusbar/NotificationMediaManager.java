@@ -26,6 +26,7 @@ import android.os.UserHandle;
 import android.util.Log;
 
 import com.android.systemui.Dumpable;
+import com.android.systemui.SysUiServiceProvider;
 import com.android.systemui.statusbar.phone.StatusBar;
 
 import java.io.FileDescriptor;
@@ -43,6 +44,8 @@ public class NotificationMediaManager implements Dumpable {
 
     private final Context mContext;
     private final MediaSessionManager mMediaSessionManager;
+	
+    private final StatusBar mStatusBar;
 
     protected NotificationPresenter mPresenter;
     protected NotificationEntryManager mEntryManager;
@@ -68,22 +71,9 @@ public class NotificationMediaManager implements Dumpable {
                     clearCurrentMediaNotification();
                     mPresenter.updateMediaMetaData(true, true);
                 }
-                if (mListener != null) {
-                    mListener.onMediaUpdated(isPlaybackActive(state.getState()));
-                }
-            }
-        }
-
-        @Override
-        public void onMetadataChanged(MediaMetadata metadata) {
-            super.onMetadataChanged(metadata);
-            if (DEBUG_MEDIA) {
-                Log.v(TAG, "DEBUG_MEDIA: onMetadataChanged: " + metadata);
-            }
-            mMediaMetadata = metadata;
-            mPresenter.updateMediaMetaData(true, true);
-            if (mListener != null) {
-                mListener.onMediaUpdated(isPlaybackActive());
+		if (mListener != null) {
+		    mListener.onMediaUpdated(isPlaybackActive(state.getState()));
+		}
             }
         }
 
@@ -102,6 +92,7 @@ public class NotificationMediaManager implements Dumpable {
                 = (MediaSessionManager) mContext.getSystemService(Context.MEDIA_SESSION_SERVICE);
         // TODO: use MediaSessionManager.SessionListener to hook us up to future updates
         // in session state
+        mStatusBar = SysUiServiceProvider.getComponent(mContext, StatusBar.class);
     }
 
     public void setUpWithPresenter(NotificationPresenter presenter,

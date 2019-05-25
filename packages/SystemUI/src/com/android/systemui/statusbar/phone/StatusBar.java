@@ -5324,9 +5324,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Settings.System.HEADS_UP_STOPLIST_VALUES), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HEADS_UP_BLACKLIST_VALUES), false, this);
-            resolver.registerContentObserver(Settings.Secure.getUriFor(
-                     Settings.Secure.PULSE_APPS_BLACKLIST),
-                    false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_TICKER_ANIMATION_MODE),
                     false, this, UserHandle.USER_ALL);
@@ -5373,8 +5370,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Settings.System.LOCKSCREEN_CLOCK_SELECTION)) ||
                     uri.equals(Settings.System.getUriFor(Settings.System.LOCKSCREEN_TEXT_CLOCK_ALIGN))) {
                 updateKeyguardStatusSettings();
-            } else if (uri.equals(Settings.Secure.getUriFor(Settings.Secure.PULSE_APPS_BLACKLIST))) {
-                setPulseBlacklist();
             } else if (uri.equals(Settings.System.getUriFor(
                 Settings.System.STATUS_BAR_TICKER_ANIMATION_MODE))) {
                 updateTickerAnimation();
@@ -5385,6 +5380,7 @@ public class StatusBar extends SystemUI implements DemoMode,
                 updateCutoutOverlay();
 	    }
                 update();
+        }
     }
 
          public void update() {
@@ -5394,7 +5390,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             setHeadsUpBlacklist();
             updateCorners();
             updateKeyguardStatusSettings();
-	        setPulseBlacklist();
             updateTickerAnimation();
             updateTickerTickDuration();
             updateCutoutOverlay();
@@ -5415,12 +5410,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         final String blackString = Settings.System.getString(mContext.getContentResolver(),
                     Settings.System.HEADS_UP_BLACKLIST_VALUES);
         splitAndAddToArrayList(mBlacklist, blackString, "\\|");
-    }
-	
-    private void setPulseBlacklist() {
-        String blacklist = Settings.Secure.getStringForUser(mContext.getContentResolver(),
-            Settings.Secure.PULSE_APPS_BLACKLIST, UserHandle.USER_CURRENT);
-        getMediaManager().setPulseBlacklist(blacklist);
     }
 	
     private void updateKeyguardStatusSettings() {

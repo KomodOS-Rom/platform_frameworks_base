@@ -68,9 +68,9 @@ public class NotificationMediaManager implements Dumpable {
                     clearCurrentMediaNotification();
                     mPresenter.updateMediaMetaData(true, true);
                 }
-            }
-            if (mListener != null) {
-                mListener.onMediaUpdated(isPlaybackActive(state.getState()));
+                if (mListener != null) {
+                    mListener.onMediaUpdated(isPlaybackActive(state.getState()));
+                }
             }
         }
 
@@ -86,18 +86,6 @@ public class NotificationMediaManager implements Dumpable {
                 mListener.onMediaUpdated(isPlaybackActive());
             }
         }
-
-        @Override
-        public void onMetadataChanged(MediaMetadata metadata) {
-            super.onMetadataChanged(metadata);
-            if (DEBUG_MEDIA) {
-                Log.v(TAG, "DEBUG_MEDIA: onMetadataChanged: " + metadata);
-            }
-            mMediaMetadata = metadata;
-            mPresenter.updateMediaMetaData(true, true);
-            setMediaPlaying();
-        }
-
 
         @Override
         public void onSessionDestroyed() {
@@ -262,7 +250,7 @@ public class NotificationMediaManager implements Dumpable {
         }
         pw.println();
     }
-
+	
     public void addCallback(MediaUpdateListener listener) {
         mListener = listener;
     }

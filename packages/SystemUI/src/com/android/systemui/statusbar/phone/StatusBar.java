@@ -5380,7 +5380,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                 updateCutoutOverlay();
 	    }
                 update();
-        }
     }
 
          public void update() {

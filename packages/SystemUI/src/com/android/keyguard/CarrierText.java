@@ -56,6 +56,12 @@ public class CarrierText extends TextView {
 
     private boolean mShowAirplaneMode;
 
+    private boolean mTelephonyCapable;
+
+    private boolean mShowMissingSim;
+
+    private boolean mShowAirplaneMode;
+
     private KeyguardUpdateMonitor mKeyguardUpdateMonitor;
 
     private WifiManager mWifiManager;
@@ -86,6 +92,14 @@ public class CarrierText extends TextView {
             updateCarrierText();
         }
 
+
+        @Override
+        public void onTelephonyCapable(boolean capable) {
+            if (DEBUG) Log.d(TAG, "onTelephonyCapable() mTelephonyCapable: "
+                    + Boolean.toString(capable));
+            mTelephonyCapable = capable;
+            updateCarrierText();
+        }
 
         public void onSimStateChanged(int subId, int slotId, IccCardConstants.State simState) {
             if (slotId < 0) {

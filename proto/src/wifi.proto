@@ -462,7 +462,11 @@ message WifiLog {
 
   // Hardware revision (EVT, DVT, PVT etc.)
   optional string hardware_revision = 124;
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> d8edac9803ce6ec223a776518bbe6c95684031c7
   // Total wifi link layer usage data over the logging duration in ms.
   optional WifiLinkLayerUsageStats wifi_link_layer_usage_stats = 125;
 }
@@ -784,7 +788,11 @@ message StaEvent {
 
     // Framework changed Sta interface MAC address
     TYPE_MAC_CHANGE = 17;
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> d8edac9803ce6ec223a776518bbe6c95684031c7
     // Wifi is turned on
     TYPE_WIFI_ENABLED = 18;
 
@@ -1561,4 +1569,8 @@ message WifiLinkLayerUsageStats {
 
   // Total time the wifi radio is scanning in ms over the logging duration.
   optional int64 radio_scan_time_ms = 5;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> d8edac9803ce6ec223a776518bbe6c95684031c7

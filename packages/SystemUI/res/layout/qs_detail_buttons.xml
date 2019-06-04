@@ -26,6 +26,12 @@
         style="@style/QSBorderlessButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
+=======
+        android:layout_marginEnd="8dp"
+        android:minHeight="48dp"
+        android:minWidth="132dp"
+>>>>>>> d8edac9803ce6ec223a776518bbe6c95684031c7
         android:textAppearance="@style/TextAppearance.QS.DetailButton"
         android:focusable="true" />
 
@@ -34,7 +40,12 @@
         style="@style/QSBorderlessButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:layout_marginStart="@dimen/notification_guts_button_horizontal_spacing"
+=======
+        android:minHeight="48dp"
+        android:minWidth="88dp"
+>>>>>>> d8edac9803ce6ec223a776518bbe6c95684031c7
         android:textAppearance="@style/TextAppearance.QS.DetailButton"
         android:focusable="true"/>
 

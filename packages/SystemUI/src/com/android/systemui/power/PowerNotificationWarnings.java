@@ -122,7 +122,10 @@ public class PowerNotificationWarnings implements PowerUI.WarningsUI {
     private final NotificationManager mNoMan;
     private final PowerManager mPowerMan;
     private final KeyguardManager mKeyguard;
+<<<<<<< HEAD
     private final Vibrator mVibrator;
+=======
+>>>>>>> d8edac9803ce6ec223a776518bbe6c95684031c7
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final Receiver mReceiver = new Receiver();
     private final Intent mOpenBatterySettings = settings(Intent.ACTION_POWER_USAGE_SUMMARY);
@@ -154,7 +157,10 @@ public class PowerNotificationWarnings implements PowerUI.WarningsUI {
         mNoMan = mContext.getSystemService(NotificationManager.class);
         mPowerMan = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         mKeyguard = mContext.getSystemService(KeyguardManager.class);
+<<<<<<< HEAD
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+=======
+>>>>>>> d8edac9803ce6ec223a776518bbe6c95684031c7
         mReceiver.init();
     }
 

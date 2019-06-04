@@ -38,6 +38,7 @@ public class DozeService extends DreamService
 
     private DozeMachine mDozeMachine;
     private DozeServicePlugin mDozePlugin;
+    private PluginManager mPluginManager;
 
     public DozeService() {
         setDebug(DEBUG);
@@ -53,17 +54,21 @@ public class DozeService extends DreamService
             finish();
             return;
         }
-        Dependency.get(PluginManager.class).addPluginListener(this,
-                DozeServicePlugin.class, false /* Allow multiple */);
+        mPluginManager = Dependency.get(PluginManager.class);
+        mPluginManager.addPluginListener(this, DozeServicePlugin.class, false /* allowMultiple */);
         mDozeMachine = new DozeFactory().assembleMachine(this);
     }
 
     @Override
     public void onDestroy() {
+<<<<<<< HEAD
         if ( DozeFactory.getHost(this) != null ) {
             Dependency.get(PluginManager.class).removePluginListener(this);
         }
 
+=======
+        mPluginManager.removePluginListener(this);
+>>>>>>> d8edac9803ce6ec223a776518bbe6c95684031c7
         super.onDestroy();
         mDozeMachine = null;
     }

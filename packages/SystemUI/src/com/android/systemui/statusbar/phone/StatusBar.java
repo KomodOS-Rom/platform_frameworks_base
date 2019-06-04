@@ -372,7 +372,11 @@ public class StatusBar extends SystemUI implements DemoMode,
     /** Whether to force dark theme if Configuration.UI_MODE_NIGHT_YES. */
     private static final boolean DARK_THEME_IN_NIGHT_MODE = false;
 
+<<<<<<< HEAD
     /** Whether to switch the device into night mode in battery saver. */
+=======
+    /** Whether to switch the device into night mode in battery saver. (Disabled.) */
+>>>>>>> d8edac9803ce6ec223a776518bbe6c95684031c7
     private static final boolean NIGHT_MODE_IN_BATTERY_SAVER = false;
 
     /**
@@ -846,10 +850,12 @@ public class StatusBar extends SystemUI implements DemoMode,
 
         IVrManager vrManager = IVrManager.Stub.asInterface(ServiceManager.getService(
                 Context.VR_SERVICE));
-        try {
-            vrManager.registerListener(mVrStateCallbacks);
-        } catch (RemoteException e) {
-            Slog.e(TAG, "Failed to register VR mode state listener: " + e);
+        if (vrManager != null) {
+            try {
+                vrManager.registerListener(mVrStateCallbacks);
+            } catch (RemoteException e) {
+                Slog.e(TAG, "Failed to register VR mode state listener: " + e);
+            }
         }
 
         IWallpaperManager wallpaperManager = IWallpaperManager.Stub.asInterface(
@@ -941,12 +947,25 @@ public class StatusBar extends SystemUI implements DemoMode,
                     mStatusBarView.setBar(this);
                     mStatusBarView.setPanel(mNotificationPanel);
                     mStatusBarView.setScrimController(mScrimController);
+
+                    // CollapsedStatusBarFragment re-inflated PhoneStatusBarView and both of
+                    // mStatusBarView.mExpanded and mStatusBarView.mBouncerShowing are false.
+                    // PhoneStatusBarView's new instance will set to be gone in
+                    // PanelBar.updateVisibility after calling mStatusBarView.setBouncerShowing
+                    // that will trigger PanelBar.updateVisibility. If there is a heads up showing,
+                    // it needs to notify PhoneStatusBarView's new instance to update the correct
+                    // status by calling mNotificationPanel.notifyBarPanelExpansionChanged().
+                    if (mHeadsUpManager.hasPinnedHeadsUp()) {
+                        mNotificationPanel.notifyBarPanelExpansionChanged();
+                    }
                     mStatusBarView.setBouncerShowing(mBouncerShowing);
                     if (oldStatusBarView != null) {
                         float fraction = oldStatusBarView.getExpansionFraction();
                         boolean expanded = oldStatusBarView.isExpanded();
                         mStatusBarView.panelExpansionChanged(fraction, expanded);
                     }
+
+                    HeadsUpAppearanceController oldController = mHeadsUpAppearanceController;
                     if (mHeadsUpAppearanceController != null) {
                         // This view is being recreated, let's destroy the old one
                         mHeadsUpAppearanceController.destroy();
@@ -954,6 +973,7 @@ public class StatusBar extends SystemUI implements DemoMode,
                     mHeadsUpAppearanceController = new HeadsUpAppearanceController(
                             mNotificationIconAreaController, mHeadsUpManager, mStatusBarWindow);
                     mStatusBarWindow.setStatusBarView(mStatusBarView);
+                    mHeadsUpAppearanceController.readFrom(oldController);
                     setAreThereNotifications();
                     checkBarModes();
  		            mStatusBarContent = (LinearLayout) mStatusBarView.findViewById(R.id.status_bar_contents);
@@ -2414,6 +2434,10 @@ public class StatusBar extends SystemUI implements DemoMode,
         if (!isCollapsing()) {
             onClosingFinished();
         }
+    }
+
+    public boolean isHeadsUpShouldBeVisible() {
+        return mHeadsUpAppearanceController.shouldBeVisible();
     }
 
     /**

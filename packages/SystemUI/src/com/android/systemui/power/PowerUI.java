@@ -687,9 +687,12 @@ public class PowerUI extends SystemUI {
 
         void dismissLowBatteryWarning();
 
+<<<<<<< HEAD
         void notifyBatteryPlugged();
         void notifyBatteryUnplugged();
 
+=======
+>>>>>>> d8edac9803ce6ec223a776518bbe6c95684031c7
         void showLowBatteryWarning(boolean playSound);
 
         void dismissInvalidChargerWarning();

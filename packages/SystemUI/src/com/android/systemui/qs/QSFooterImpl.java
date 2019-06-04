@@ -110,6 +110,14 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
         mSettingsContainer = findViewById(R.id.settings_button_container);
         mSettingsButton.setOnClickListener(this);
 
+<<<<<<< HEAD
+=======
+        mMobileGroup = findViewById(R.id.mobile_combo);
+        mMobileSignal = findViewById(R.id.mobile_signal);
+        mMobileRoaming = findViewById(R.id.mobile_roaming);
+        mCarrierText = findViewById(R.id.qs_carrier_text);
+
+>>>>>>> d8edac9803ce6ec223a776518bbe6c95684031c7
         mMultiUserSwitch = findViewById(R.id.multi_user_switch);
         mMultiUserAvatar = mMultiUserSwitch.findViewById(R.id.multi_user_avatar);
 

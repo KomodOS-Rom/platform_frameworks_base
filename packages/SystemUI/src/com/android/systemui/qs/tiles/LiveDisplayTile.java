@@ -138,7 +138,7 @@ public class LiveDisplayTile extends QSTileImpl<LiveDisplayState> {
 
     @Override
     public int getMetricsCategory() {
-        return MetricsEvent.BEAST;
+        return MetricsEvent.KOMODO;
     }
 
     @Override

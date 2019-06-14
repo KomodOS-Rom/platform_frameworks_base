@@ -17,7 +17,7 @@
 * -->
 */
 
-package com.android.internal.util.beast;
+package com.android.internal.util.komodo;
 
 import android.app.ActivityManager;
 import android.content.Context;

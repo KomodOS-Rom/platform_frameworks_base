@@ -5003,6 +5003,12 @@ public final class Settings {
          * @hide
          */
         public static final String PIXEL_NAV_ANIMATION = "pixel_nav_animation";
+
+        /**
+         * Gaming Mode master switch
+         * @hide
+         */
+        public static final String GAMING_MODE_MASTER_SWITCH = "gaming_mode_master_switch";
 	
 	/**
          * Save the user defined brightness state

@@ -519,7 +519,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.android.internal.util.custom.cutout.CutoutFullscreenController;
-import com.android.internal.util.havoc.GamingModeController;
+import com.android.internal.util.komodo.GamingModeController;
 
 public class ActivityManagerService extends IActivityManager.Stub
         implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback {
@@ -4539,14 +4539,9 @@ public class ActivityManagerService extends IActivityManager.Stub
                 }
             }
 
-            if (mGamingModeController != null) {
-              if (mGamingModeController.gamingModeMaster()) {
-                if (hostingType.equals("activity")) {
-                    if (startResult != null) {
-                         mGamingModeController.noteStarted(app.info.packageName);
-                    }
-                }
-              }
+            if (mGamingModeController != null && mGamingModeController.isGamingModeEnabled() &&
+                    hostingType.equals("activity") && startResult != null) {
+                mGamingModeController.noteStarted(app.info.packageName);
             }
 
             checkTime(startTime, "startProcess: returned from zygote!");
@@ -25133,19 +25128,16 @@ public class ActivityManagerService extends IActivityManager.Stub
                         mCurResumedPackage, mCurResumedUid);
             }
 
-            if (mCurResumedPackage != null) {
-                if (mGamingModeController != null) {
-                    if (mGamingModeController.gamingModeMaster()) {
-                        if(mGamingModeController.topAppChanged(mCurResumedPackage) && !mGamingModeController.getEnabled()) {
-                              Settings.System.putInt(mContext.getContentResolver(),
-                                 Settings.System.ENABLE_GAMING_MODE, 1);
-                         } else {
-                              Settings.System.putInt(mContext.getContentResolver(),
-                                 Settings.System.ENABLE_GAMING_MODE, 0);
-                         }
-                    }
+            if (mCurResumedPackage != null && mGamingModeController != null && mGamingModeController.isGamingModeEnabled()) {
+                if (mGamingModeController.topAppChanged(mCurResumedPackage) && !mGamingModeController.isGamingModeActivated()) {
+                    Settings.System.putInt(mContext.getContentResolver(),
+                        Settings.System.GAMING_MODE_ACTIVE, 1);
+                } else if (!mGamingModeController.topAppChanged(mCurResumedPackage) && 
+                        mGamingModeController.isGamingModeActivated()) {
+                    Settings.System.putInt(mContext.getContentResolver(),
+                        Settings.System.GAMING_MODE_ACTIVE, 0);
                 }
-           }
+            }
         }
         return act;
     }

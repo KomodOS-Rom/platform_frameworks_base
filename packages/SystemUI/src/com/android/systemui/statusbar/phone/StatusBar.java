@@ -516,6 +516,8 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     private PackageMonitor mPackageMonitor;
 
+    private boolean mHeadsUpDisabled, mGamingModeActivated;
+
     // XXX: gesture research
     private final GestureRecorder mGestureRec = DEBUG_GESTURES
         ? new GestureRecorder("/sdcard/statusbar_gestures.dat")
@@ -5401,7 +5403,13 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.DISPLAY_CUTOUT_HIDDEN),
                     false, this, UserHandle.USER_ALL);
-        }
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.GAMING_MODE_ACTIVE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.GAMING_MODE_HEADSUP_TOGGLE),
+                    false, this, UserHandle.USER_ALL);
+	    }
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
@@ -5433,6 +5441,10 @@ public class StatusBar extends SystemUI implements DemoMode,
                 updateTickerTickDuration();
             }else if (uri.equals(Settings.System.getUriFor(Settings.System.DISPLAY_CUTOUT_HIDDEN))) {
                 updateCutoutOverlay();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.GAMING_MODE_ACTIVE)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.GAMING_MODE_HEADSUP_TOGGLE))) {
+                updateGamingPeekMode();
 	    }
                 update();
     }
@@ -5444,10 +5456,11 @@ public class StatusBar extends SystemUI implements DemoMode,
             setHeadsUpBlacklist();
             updateCorners();
             updateKeyguardStatusSettings();
-	        setPulseBlacklist();
+            setPulseBlacklist();
             updateTickerAnimation();
             updateTickerTickDuration();
             updateCutoutOverlay();
+            updateGamingPeekMode();
             USE_OLD_MOBILETYPE = Settings.System.getIntForUser(mContext.getContentResolver(),
                     Settings.System.USE_OLD_MOBILETYPE, 0,
                     UserHandle.USER_CURRENT) != 0;
@@ -5466,13 +5479,13 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Settings.System.HEADS_UP_BLACKLIST_VALUES);
         splitAndAddToArrayList(mBlacklist, blackString, "\\|");
     }
-	
+
     private void setPulseBlacklist() {
         String blacklist = Settings.Secure.getStringForUser(mContext.getContentResolver(),
             Settings.Secure.PULSE_APPS_BLACKLIST, UserHandle.USER_CURRENT);
         getMediaManager().setPulseBlacklist(blacklist);
     }
-	
+
     private void updateKeyguardStatusSettings() {
         mNotificationPanel.updateKeyguardStatusSettings();
     }
@@ -5524,6 +5537,14 @@ public class StatusBar extends SystemUI implements DemoMode,
         if (mTicker != null) {
             mTicker.updateTickDuration(mTickerTickDuration);
         }
+    }
+
+    private void updateGamingPeekMode() {
+        mGamingModeActivated = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.GAMING_MODE_ACTIVE, 0) == 1;
+        mHeadsUpDisabled = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.GAMING_MODE_HEADSUP_TOGGLE, 1) == 1;
+        mEntryManager.setGamingPeekMode(mGamingModeActivated && mHeadsUpDisabled);
     }
 
     public int getWakefulnessState() {

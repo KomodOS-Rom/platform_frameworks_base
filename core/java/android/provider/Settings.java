@@ -4680,13 +4680,6 @@ public final class Settings {
          * @hide
          */
         public static final String SYSTEM_THEME_STYLE = "system_theme_style";
-		
-        /**
-         * Whether to enable gaming mode or not
-         *
-         * @hide
-         */
-        public static final String ENABLE_GAMING_MODE = "enable_gaming_mode";
 
         /**
          * Enable blocking wakelock

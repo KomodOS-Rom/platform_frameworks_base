@@ -590,7 +590,6 @@ public class StatusBar extends SystemUI implements DemoMode,
     private VisualizerView mVisualizerView;
     private boolean mScreenOn;
     private boolean mKeyguardShowingMedia;
-    private boolean mWallpaperSupportsAmbientMode;
 
     private boolean mWallpaperSupportsAmbientMode;
     // LS visualizer on Ambient Display

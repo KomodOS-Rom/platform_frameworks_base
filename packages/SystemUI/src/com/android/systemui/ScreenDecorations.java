@@ -114,7 +114,7 @@ public class ScreenDecorations extends SystemUI implements Tunable {
     @Override
     public void start() {
         mImmerseMode = System.getIntForUser(mContext.getContentResolver(),
-                        System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) == 1;
+                        System.DISPLAY_CUTOUT_HIDDEN, 0, UserHandle.USER_CURRENT) == 1;
         mHandler = startHandlerThread();
         mHandler.post(this::startOnScreenDecorationsThread);
         setupStatusBarPaddingIfNeeded();
@@ -521,12 +521,12 @@ public class ScreenDecorations extends SystemUI implements Tunable {
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(System.getUriFor(
-                    System.DISPLAY_CUTOUT_MODE), false, this);
+                    System.DISPLAY_CUTOUT_HIDDEN), false, this);
         }
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-            if (uri.equals(System.getUriFor(System.DISPLAY_CUTOUT_MODE))) {
+            if (uri.equals(System.getUriFor(System.DISPLAY_CUTOUT_HIDDEN))) {
                 updateCutoutMode();
             }
         }
@@ -548,7 +548,7 @@ public class ScreenDecorations extends SystemUI implements Tunable {
             newImmerseMode = false;
         else
             newImmerseMode = System.getIntForUser(mContext.getContentResolver(),
-                        System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) == 1;
+                        System.DISPLAY_CUTOUT_HIDDEN, 0, UserHandle.USER_CURRENT) == 1;
         if (mImmerseMode != newImmerseMode) {
             mImmerseMode = newImmerseMode;
             mHandler.removeCallbacksAndMessages(null);

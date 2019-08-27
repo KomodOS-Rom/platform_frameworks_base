@@ -957,7 +957,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                     mStatusBarView.setBar(this);
                     mStatusBarView.setPanel(mNotificationPanel);
                     mStatusBarView.setScrimController(mScrimController);
-                    handleCutout(null);
 
                     // CollapsedStatusBarFragment re-inflated PhoneStatusBarView and both of
                     // mStatusBarView.mExpanded and mStatusBarView.mBouncerShowing are false.
@@ -2398,10 +2397,17 @@ public class StatusBar extends SystemUI implements DemoMode,
         return (cornerRadiusRes == cornerRadius) && (contentPaddingRes == contentPadding);
     }
 	
-    private void updateCutoutOverlay() {
-        boolean displayCutoutHidden = Settings.System.getIntForUser(mContext.getContentResolver(),
+    private void updateCutoutOverlay(Configuration newConfig) {
+        boolean immerseMode;
+        if (newConfig == null || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            immerseMode = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.DISPLAY_CUTOUT_HIDDEN, 0, UserHandle.USER_CURRENT) == 1;
-        if (mDisplayCutoutHidden != displayCutoutHidden){
+        } else {
+            immerseMode = false;
+        }
+        boolean displayCutoutHidden = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.DISPLAY_CUTOUT_HIDDEN, 0, UserHandle.USER_CURRENT) == 2;
+        if (displayCutoutHidden == true) {
             mDisplayCutoutHidden = displayCutoutHidden;
             mUiOffloadThread.submit(() -> {
                 try {
@@ -2411,24 +2417,7 @@ public class StatusBar extends SystemUI implements DemoMode,
                 }
             });
         }
-    }
-
-    private void setCutoutOverlay(boolean enable) {
-        try {
-            mOverlayManager.setEnabled("com.potato.overlay.hidecutout",
-                        enable, mLockscreenUserManager.getCurrentUserId());
-        } catch (RemoteException e) {
-            Log.w(TAG, "Failed to handle cutout overlay", e);
-        }
-    }
-
-    private void setStatusBarStockOverlay(boolean enable) {
-        try {
-            mOverlayManager.setEnabled("com.potato.overlay.statusbarstock",
-                        enable, mLockscreenUserManager.getCurrentUserId());
-        } catch (RemoteException e) {
-            Log.w(TAG, "Failed to handle statusbar height overlay", e);
-        }
+        updateStatusBarColors(immerseMode);
     }
 
     @Nullable
@@ -3663,7 +3652,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 
         mViewHierarchyManager.updateRowStates();
         mScreenPinningRequest.onConfigurationChanged();
-        handleCutout(newConfig);
+        updateCutoutOverlay(newConfig);
     }
 
     @Override
@@ -5440,12 +5429,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.GAMING_MODE_HEADSUP_TOGGLE),
                     false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.DISPLAY_CUTOUT_MODE),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STOCK_STATUSBAR_IN_HIDE),
-                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -5476,20 +5459,13 @@ public class StatusBar extends SystemUI implements DemoMode,
             } else if (uri.equals(Settings.System.getUriFor(
                 Settings.System.STATUS_BAR_TICKER_TICK_DURATION))) {
                 updateTickerTickDuration();
-            }else if (uri.equals(Settings.System.getUriFor(Settings.System.DISPLAY_CUTOUT_HIDDEN))) {
-                updateCutoutOverlay();
+            } else if (uri.equals(Settings.System.getUriFor(Settings.System.DISPLAY_CUTOUT_HIDDEN))) {
+                updateCutoutOverlay(null);
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.GAMING_MODE_ACTIVE)) ||
                     uri.equals(Settings.System.getUriFor(Settings.System.GAMING_MODE_HEADSUP_TOGGLE))) {
                 updateGamingPeekMode();
-            } else if (uri.equals(Settings.System.getUriFor(Settings.System.DISPLAY_CUTOUT_MODE)) ||
-                    uri.equals(Settings.System.getUriFor(Settings.System.STOCK_STATUSBAR_IN_HIDE))) {
-                handleCutout(null);
             }
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
             update();
         }
 
@@ -5503,13 +5479,12 @@ public class StatusBar extends SystemUI implements DemoMode,
             setPulseBlacklist();
             updateTickerAnimation();
             updateTickerTickDuration();
-            updateCutoutOverlay();
+            updateCutoutOverlay(null);
             updateGamingPeekMode();
             USE_OLD_MOBILETYPE = Settings.System.getIntForUser(mContext.getContentResolver(),
                     Settings.System.USE_OLD_MOBILETYPE, 0,
                     UserHandle.USER_CURRENT) != 0;
             TelephonyIcons.updateIcons(USE_OLD_MOBILETYPE);
-            handleCutout(null);
         }
     }
 
@@ -5525,23 +5500,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             if (mKeyguardStatusBar != null)
                 mKeyguardStatusBar.setBackgroundColor(Color.TRANSPARENT);
         }
-    }
-
-    private void handleCutout(Configuration newConfig) {
-        boolean immerseMode;
-        if (newConfig == null || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            immerseMode = Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) == 1;
-        } else {
-            immerseMode = false;
-        }
-        final boolean hideCutoutMode = Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) == 2;
-        final boolean statusBarStock = Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.STOCK_STATUSBAR_IN_HIDE, 1, UserHandle.USER_CURRENT) == 1;
-        updateStatusBarColors(immerseMode);
-        setCutoutOverlay(hideCutoutMode);
-        setStatusBarStockOverlay(hideCutoutMode && statusBarStock);
     }
 
     private void setHeadsUpStoplist() {

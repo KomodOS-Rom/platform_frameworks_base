@@ -489,12 +489,12 @@ public class KeyguardStatusBarView extends RelativeLayout
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.DISPLAY_CUTOUT_MODE), false, this);
+                    Settings.System.DISPLAY_CUTOUT_HIDDEN), false, this);
         }
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-            if (uri.equals(Settings.System.getUriFor(Settings.System.DISPLAY_CUTOUT_MODE))) {
+            if (uri.equals(Settings.System.getUriFor(Settings.System.DISPLAY_CUTOUT_HIDDEN))) {
                 updateCutout();
             }
         }
@@ -507,7 +507,7 @@ public class KeyguardStatusBarView extends RelativeLayout
 
     private void updateCutout() {
         mImmerseMode = Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) == 1;
+                        Settings.System.DISPLAY_CUTOUT_HIDDEN, 0, UserHandle.USER_CURRENT) == 1;
         updateStatusBarHeight();
     }
 }

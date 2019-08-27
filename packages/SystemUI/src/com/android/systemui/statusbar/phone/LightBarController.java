@@ -302,12 +302,12 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.DISPLAY_CUTOUT_MODE), false, this);
+                    Settings.System.DISPLAY_CUTOUT_HIDDEN), false, this);
         }
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-            if (uri.equals(Settings.System.getUriFor(Settings.System.DISPLAY_CUTOUT_MODE))) {
+            if (uri.equals(Settings.System.getUriFor(Settings.System.DISPLAY_CUTOUT_HIDDEN))) {
                 updateCutout(null);
             }
         }
@@ -335,7 +335,7 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
     private void updateCutout(Configuration newConfig) {
         if (newConfig == null || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             mForceDarkIcons = Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) == 1;
+                    Settings.System.DISPLAY_CUTOUT_HIDDEN, 0, UserHandle.USER_CURRENT) == 1;
         } else {
             mForceDarkIcons = false;
         }
